@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btAdd"
+        android:layout_width="63dp"
+        android:layout_height="61dp"
+        android:text="+"
+        android:textAlignment="center"
+        android:textColorLink="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.262"
+        android:layout_marginTop="80dp"/>
+
+    <Button
+        android:id="@+id/btLoop"
+        android:layout_width="63dp"
+        android:layout_height="61dp"
+        android:text="R"
+        android:textAlignment="center"
+        android:textColorLink="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.735"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.262"
+        android:layout_marginTop="80dp"/>
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="219dp"
+        android:layout_height="54dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="2.4. 2025"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.281"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.062"
+        android:layout_marginBottom="80dp"/>
+
+    <EditText
+        android:id="@+id/etValue"
+        android:layout_width="165dp"
+        android:layout_height="58dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="1 500"
+        android:layout_marginTop="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.219"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.161"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
