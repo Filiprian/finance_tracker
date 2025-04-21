@@ -12,6 +12,9 @@ import android.widget.EditText
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+
+    var balance = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,26 +26,69 @@ class MainActivity : AppCompatActivity() {
             val Balance = findViewById<TextView>(R.id.ttBalance)
             val Plus = findViewById<Button>(R.id.btPlus)
             val Minus = findViewById<Button>(R.id.btMinus)
-            var balance = 0
 
-            Balance.text = "$balance Kč"
 
             Plus.setOnClickListener {
-                val Add = findViewById<Button>(R.id.btAdd)
                 val dialogView = LayoutInflater.from(this).inflate(R.layout.income, null)
                 val dialogBuilder = AlertDialog.Builder(this)
                     .setView(dialogView)
                     .setCancelable(true)
 
+                val Add = dialogView.findViewById<Button>(R.id.btAdd)
+                val Value = dialogView.findViewById<EditText>(R.id.etValue)
+                val Day = dialogView.findViewById<EditText>(R.id.etDay)
+                val Month = dialogView.findViewById<EditText>(R.id.etMonth)
+                val Year = dialogView.findViewById<EditText>(R.id.etYear)
+
+                Add.text = "+"
+
                 val alertDialog = dialogBuilder.create()
                 alertDialog.show()
 
                 Add.setOnClickListener {
-                    val Value = findViewById<EditText>(R.id.etValue)
-                    val value = Value.text.toString().toInt()
-                    balance += value
-                    Balance.text = "$balance Kč"
-                    alertDialog.dismiss()
+                    val value = Value.text.toString().toIntOrNull()
+                    val day = Day.text.toString().toIntOrNull()
+                    val month = Month.text.toString().toIntOrNull()
+                    val year = Year.text.toString().toIntOrNull()
+
+                    if (value != null && day in 1..31 && month in 1..12 && year != null) {
+                        balance += value
+                        Balance.text = "$balance Kč"
+                        alertDialog.dismiss()
+                    }
+
+
+                }
+            }
+
+            Minus.setOnClickListener {
+                val dialogView = LayoutInflater.from(this).inflate(R.layout.income, null)
+                val dialogBuilder = AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setCancelable(true)
+
+                val Add = dialogView.findViewById<Button>(R.id.btAdd)
+                val Value = dialogView.findViewById<EditText>(R.id.etValue)
+                val Day = dialogView.findViewById<EditText>(R.id.etDay)
+                val Month = dialogView.findViewById<EditText>(R.id.etMonth)
+                val Year = dialogView.findViewById<EditText>(R.id.etYear)
+
+                Add.text = "-"
+
+                val alertDialog = dialogBuilder.create()
+                alertDialog.show()
+
+                Add.setOnClickListener {
+                    val value = Value.text.toString().toIntOrNull()
+                    val day = Day.text.toString().toIntOrNull()
+                    val month = Month.text.toString().toIntOrNull()
+                    val year = Year.text.toString().toIntOrNull()
+
+                    if (value != null && day in 1..31 && month in 1..12 && year != null) {
+                        balance -= value
+                        Balance.text = "$balance Kč"
+                        alertDialog.dismiss()
+                    }
 
 
                 }

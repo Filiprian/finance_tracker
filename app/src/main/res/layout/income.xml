@@ -40,19 +40,48 @@
         android:layout_marginTop="80dp"/>
 
     <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="219dp"
-        android:layout_height="54dp"
+        android:id="@+id/etDay"
+        android:layout_width="79dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="80dp"
         android:ems="10"
+        android:hint="22."
         android:inputType="text"
-        android:hint="2.4. 2025"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.281"
+        app:layout_constraintHorizontal_bias="0.162"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062"
-        android:layout_marginBottom="80dp"/>
+        app:layout_constraintVertical_bias="0.09" />
+
+    <EditText
+        android:id="@+id/etMonth"
+        android:layout_width="79dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="80dp"
+        android:ems="10"
+        android:hint="8."
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.089" />
+
+    <EditText
+        android:id="@+id/etYear"
+        android:layout_width="79dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="80dp"
+        android:ems="10"
+        android:hint="2024"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.831"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.089" />
 
     <EditText
         android:id="@+id/etValue"
