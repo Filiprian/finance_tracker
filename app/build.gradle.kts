@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -45,4 +46,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // 🏡 ROOM
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler) // 👈 Needed for @Entity and @Dao to work
+
+    // 📆 LIFECYCLE
+    implementation(libs.lifecycle.livedata)
+    implementation(libs.lifecycle.viewmodel)
 }

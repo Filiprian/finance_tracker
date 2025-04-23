@@ -20,6 +20,13 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
+room-runtime = "androidx.room:room-runtime:2.6.1"
+room-ktx = "androidx.room:room-ktx:2.6.1"
+room-compiler = "androidx.room:room-compiler:2.6.1"
+
+lifecycle-livedata = "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
+lifecycle-viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
