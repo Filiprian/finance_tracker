@@ -11,3 +11,9 @@ data class Expense(
     val month: Int,
     val year: Int
 )
+
+@Entity
+data class Balance(
+    @PrimaryKey val id: Int = 1,
+    val total: Int
+)

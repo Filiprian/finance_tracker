@@ -11,5 +11,5 @@ interface ExpenseDao {
     suspend fun insert(expense: Expense)
 
     @Query("SELECT * FROM Expense")
-    fun getAllNow(): LiveData<List<Expense>>
+    suspend fun getAllNow(): List<Expense>
 }

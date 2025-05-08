@@ -1,7 +1,7 @@
-// Add this at the top
 package com.example.finance
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var expenseDao: ExpenseDao
+    private lateinit var balanceDao: BalanceDao
 
     private var balance = 0
 
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
         expenseDao = db.expenseDao()
+        balanceDao = db.balanceDao()
 
         val balanceText = findViewById<TextView>(R.id.ttBalance)
         val plusButton = findViewById<Button>(R.id.btPlus)
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         fun updateBalanceDisplay() {
             balanceText.text = "$balance Kč"
+        }
+
+        lifecycleScope.launch {
+            val savedBalance = db.balanceDao().getBalance()
+            balance = savedBalance?.total ?: 0
+            updateBalanceDisplay()
         }
 
         fun showDialog(isAddition: Boolean) {
@@ -72,8 +80,13 @@ class MainActivity : AppCompatActivity() {
                         year = year
                     )
 
+                    val currentBalance = Balance(
+                        total = balance
+                    )
+
                     lifecycleScope.launch {
                         expenseDao.insert(expense)
+                        balanceDao.insertOrUpdate(currentBalance)
                     }
 
                     alertDialog.dismiss()
@@ -88,6 +101,14 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // Quick database test: print all expenses to Logcat
+        lifecycleScope.launch {
+            val expenses = expenseDao.getAllNow() // Make sure getAllNow() is a suspend function that returns a List<Expense>
+            for (expense in expenses) {
+                Log.d("DB_TEST", expense.toString())
+            }
         }
     }
 }
