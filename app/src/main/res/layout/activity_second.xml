@@ -32,11 +32,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.398" />
 
-    <TextView
+    <EditText
         android:id="@+id/ttGoal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100 000 Kč"
+        android:text="100 000"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
