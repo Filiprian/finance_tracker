@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import android.content.Intent
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val balanceText = findViewById<TextView>(R.id.ttBalance)
         val plusButton = findViewById<Button>(R.id.btPlus)
         val minusButton = findViewById<Button>(R.id.btMinus)
+        val rightButton = findViewById<Button>(R.id.btRight)
 
         fun updateBalanceDisplay() {
             balanceText.text = "$balance Kč"
@@ -43,6 +46,11 @@ class MainActivity : AppCompatActivity() {
             val savedBalance = db.balanceDao().getBalance()
             balance = savedBalance?.total ?: 0
             updateBalanceDisplay()
+        }
+
+        rightButton.setOnClickListener {
+            val intent = Intent(this, SecondActivity::class.java)
+            startActivity(intent)
         }
 
         fun showDialog(isAddition: Boolean) {
