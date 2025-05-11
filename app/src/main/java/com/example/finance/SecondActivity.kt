@@ -19,6 +19,10 @@ class SecondActivity : AppCompatActivity() {
 
     private var balance = 0
 
+    private lateinit var db: AppDatabase
+    private lateinit var emergencyExpensesDao: EmergencyExpensesDao
+    private lateinit var emergencyBalanceDao: EmergencyBalanceDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,6 +30,10 @@ class SecondActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+
+            db = AppDatabase.getDatabase(this)
+            EmergencyExpensesDao = db.emergencyExpenseDao()
+            EmergencyBalanceDao = db.emergencyBalanceDao()
 
             val balanceText = findViewById<TextView>(R.id.ttBalance)
             val plusButton = findViewById<Button>(R.id.btPlus)
@@ -77,6 +85,22 @@ class SecondActivity : AppCompatActivity() {
                         val finalValue = if (isAddition) value else -value
                         balance += finalValue
                         updateBalanceDisplay()
+
+                        val expense = Expense(
+                            value = finalValue,
+                            day = day,
+                            month = month,
+                            year = year
+                        )
+
+                        val currentBalance = Balance(
+                            total = balance
+                        )
+
+                        lifecycleScope.launch {
+                            expenseDao.insert(expense)
+                            balanceDao.insertOrUpdate(currentBalance)
+                        }
 
                         alertDialog.dismiss()
                     }

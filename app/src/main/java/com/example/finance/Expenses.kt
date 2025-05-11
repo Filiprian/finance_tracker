@@ -17,3 +17,18 @@ data class Balance(
     @PrimaryKey val id: Int = 1,
     val total: Int
 )
+
+@Entity
+data class EmergencyExpense(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val value: Int,
+    val day: Int,
+    val month: Int,
+    val year: Int
+)
+
+@Entity
+data class EmergencyBalance(
+    @PrimaryKey val id: Int = 1,
+    val total: Int
+)
