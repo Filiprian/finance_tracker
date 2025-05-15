@@ -32,3 +32,9 @@ data class EmergencyBalance(
     @PrimaryKey val id: Int = 1,
     val total: Int
 )
+
+@Entity
+data class EmergencyGoal(
+    @PrimaryKey val id: Int = 1,
+    val total: Int
+)

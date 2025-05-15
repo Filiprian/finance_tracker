@@ -23,6 +23,7 @@ class SecondActivity : AppCompatActivity() {
     private lateinit var db: AppDatabase
     private lateinit var emergencyExpensesDao: EmergencyExpensesDao
     private lateinit var emergencyBalanceDao: EmergencyBalanceDao
+    private lateinit var emergencyGoalDao: EmergencyGoalDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,8 @@ class SecondActivity : AppCompatActivity() {
         db = AppDatabase.getDatabase(this)
         emergencyExpensesDao = db.emergencyExpenseDao()
         emergencyBalanceDao = db.emergencyBalanceDao()
+        emergencyGoalDao = db.emergencyGoalDao()
+
 
         val balanceText = findViewById<TextView>(R.id.ttBalance)
         val plusButton = findViewById<Button>(R.id.btPlus)
@@ -40,7 +43,7 @@ class SecondActivity : AppCompatActivity() {
         val leftButton = findViewById<Button>(R.id.btLeft)
         val goalText = findViewById<EditText>(R.id.ttGoal)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-
+        val goal = goalText.text.toString().toIntOrNull()
 
         leftButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -55,6 +58,27 @@ class SecondActivity : AppCompatActivity() {
                 progressBar.progress = progress.coerceIn(0, 100)
             }
         }
+
+        goalText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (goal != null) {
+                    val emergencyGoal = EmergencyGoal(
+                        total = goal
+                    )
+                } else {
+
+                }
+
+                lifecycleScope.launch {
+                    emergencyGoalDao.insertOrUpdate(emergencyGoal)
+                }
+
+
+                updateBalanceDisplay() // call the same method to update the bar
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         lifecycleScope.launch {
             val savedBalance = db.emergencyBalanceDao().getBalance()
