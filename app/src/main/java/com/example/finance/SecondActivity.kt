@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -37,13 +38,14 @@ class SecondActivity : AppCompatActivity() {
 
 
         val balanceText = findViewById<TextView>(R.id.ttBalance)
+        val warningText = findViewById<TextView>(R.id.ttWarning)
         val plusButton = findViewById<Button>(R.id.btPlus)
         val minusButton = findViewById<Button>(R.id.btMinus)
         val rightButton = findViewById<Button>(R.id.btRight)
         val leftButton = findViewById<Button>(R.id.btLeft)
         val goalText = findViewById<EditText>(R.id.ttGoal)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-        val goal = goalText.text.toString().toIntOrNull()
+
 
         leftButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -61,18 +63,25 @@ class SecondActivity : AppCompatActivity() {
 
         goalText.addTextChangedListener(object : android.text.TextWatcher {
             override fun afterTextChanged(s: android.text.Editable?) {
+                val goal = goalText.text.toString().toIntOrNull()
                 if (goal != null) {
+                    warningText.visibility = View.INVISIBLE
                     val emergencyGoal = EmergencyGoal(
+                        id = 1,
                         total = goal
                     )
+                    lifecycleScope.launch {
+                        emergencyGoalDao.insertOrUpdate(emergencyGoal)
+                        Log.d("EMERGENCY_GOAL", "Saved goal: ${emergencyGoal.total}")
+                    }
+                    lifecycleScope.launch {
+                        val savedGoals = emergencyGoalDao.getBalance()
+                        Log.d("EMERGENCY_GOAL", "Loaded goals: $savedGoals")
+                    }
+
                 } else {
-
+                    warningText.visibility = View.VISIBLE
                 }
-
-                lifecycleScope.launch {
-                    emergencyGoalDao.insertOrUpdate(emergencyGoal)
-                }
-
 
                 updateBalanceDisplay() // call the same method to update the bar
             }
@@ -153,5 +162,6 @@ class SecondActivity : AppCompatActivity() {
                 Log.d("DB_TEST", expense.toString())
             }
         }
+
     }
 }
