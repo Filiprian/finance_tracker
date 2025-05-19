@@ -14,6 +14,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.content.Intent
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 
 
 class MainActivity : AppCompatActivity() {
@@ -69,6 +73,22 @@ class MainActivity : AppCompatActivity() {
 
             val alertDialog = dialogBuilder.create()
             alertDialog.show()
+
+            val spinner = dialogView.findViewById<Spinner>(R.id.spinner)
+            val categories = listOf("Rent", "Food", "Utilities", "Cloths", "Fun", "Other")
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    val selectedCategory = categories[position]
+                    // do something with selectedCategory
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
 
             actionButton.setOnClickListener {
                 val value = valueInput.text.toString().toIntOrNull()

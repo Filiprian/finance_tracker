@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Expense::class, Balance::class, EmergencyExpense::class, EmergencyBalance::class, EmergencyGoal::class], version = 5)
+@Database(entities = [Expense::class, Balance::class, EmergencyExpense::class, EmergencyBalance::class, EmergencyGoal::class], version = 6)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
     abstract fun balanceDao(): BalanceDao

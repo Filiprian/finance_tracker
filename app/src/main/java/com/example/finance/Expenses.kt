@@ -9,7 +9,8 @@ data class Expense(
     val value: Int,
     val day: Int,
     val month: Int,
-    val year: Int
+    val year: Int,
+    val category: String = ""
 )
 
 @Entity
@@ -24,7 +25,8 @@ data class EmergencyExpense(
     val value: Int,
     val day: Int,
     val month: Int,
-    val year: Int
+    val year: Int,
+    val category: String = ""
 )
 
 @Entity
