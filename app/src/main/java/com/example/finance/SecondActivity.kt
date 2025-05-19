@@ -48,6 +48,7 @@ class SecondActivity : AppCompatActivity() {
         val leftButton = findViewById<Button>(R.id.btLeft)
         val goalText = findViewById<EditText>(R.id.ttGoal)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        var categories: List<String>
 
 
         leftButton.setOnClickListener {
@@ -112,11 +113,31 @@ class SecondActivity : AppCompatActivity() {
             val yearInput = dialogView.findViewById<EditText>(R.id.etYear)
             val actionButton = dialogView.findViewById<Button>(R.id.btAdd)
 
-            actionButton.text = if (isAddition) "+" else "-"
+            if (isAddition) {
+                actionButton.text = "+"
+                categories = listOf("Job", "Investing", "Gift", "Others")
+            }
+            else {
+                actionButton.text = "-"
+                categories = listOf("Investing", "Education", "Rent", "Food", "Utilities", "Cloths", "Fun", "Other")
+            }
 
             val alertDialog = dialogBuilder.create()
             alertDialog.show()
 
+            val spinner = dialogView.findViewById<Spinner>(R.id.spinner)
+
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
 
             actionButton.setOnClickListener {
                 val value = valueInput.text.toString().toIntOrNull()
@@ -129,11 +150,14 @@ class SecondActivity : AppCompatActivity() {
                     balance += finalValue
                     updateBalanceDisplay()
 
+                    val selectedCategory = spinner.selectedItem.toString()
+
                     val emergencyExpense = EmergencyExpense(
                         value = finalValue,
                         day = day,
                         month = month,
-                        year = year
+                        year = year,
+                        category = selectedCategory
                     )
 
                     val emergencyBalance = EmergencyBalance(

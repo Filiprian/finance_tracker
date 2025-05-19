@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         val plusButton = findViewById<Button>(R.id.btPlus)
         val minusButton = findViewById<Button>(R.id.btMinus)
         val rightButton = findViewById<Button>(R.id.btRight)
+        var categories: List<String>
 
         fun updateBalanceDisplay() {
             balanceText.text = "$balance Kč"
@@ -69,13 +70,20 @@ class MainActivity : AppCompatActivity() {
             val yearInput = dialogView.findViewById<EditText>(R.id.etYear)
             val actionButton = dialogView.findViewById<Button>(R.id.btAdd)
 
-            actionButton.text = if (isAddition) "+" else "-"
+            if (isAddition) {
+                actionButton.text = "+"
+                categories = listOf("Job", "Investing", "Gift", "Others")
+            }
+            else {
+                actionButton.text = "-"
+                categories = listOf("Investing", "Education", "Rent", "Food", "Utilities", "Cloths", "Fun", "Other")
+            }
 
             val alertDialog = dialogBuilder.create()
             alertDialog.show()
 
             val spinner = dialogView.findViewById<Spinner>(R.id.spinner)
-            val categories = listOf("Rent", "Food", "Utilities", "Cloths", "Fun", "Other")
+
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -83,8 +91,6 @@ class MainActivity : AppCompatActivity() {
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    val selectedCategory = categories[position]
-                    // do something with selectedCategory
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -101,11 +107,14 @@ class MainActivity : AppCompatActivity() {
                     balance += finalValue
                     updateBalanceDisplay()
 
+                    val selectedCategory = spinner.selectedItem.toString()
+
                     val expense = Expense(
                         value = finalValue,
                         day = day,
                         month = month,
-                        year = year
+                        year = year,
+                        category = selectedCategory
                     )
 
                     val currentBalance = Balance(
