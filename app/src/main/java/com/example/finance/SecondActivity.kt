@@ -72,11 +72,7 @@ class SecondActivity : AppCompatActivity() {
                     )
                     lifecycleScope.launch {
                         emergencyGoalDao.insertOrUpdate(emergencyGoal)
-                        Log.d("EMERGENCY_GOAL", "Saved goal: ${emergencyGoal.total}")
-                    }
-                    lifecycleScope.launch {
-                        val savedGoals = emergencyGoalDao.getBalance()
-                        Log.d("EMERGENCY_GOAL", "Loaded goals: $savedGoals")
+                        Log.d("DB_TEST", "Saved goal: ${emergencyGoal.total}")
                     }
 
                 } else {
@@ -88,6 +84,11 @@ class SecondActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        lifecycleScope.launch {
+            val savedGoals = db.emergencyGoalDao().getBalance()
+            goalText.setText("${savedGoals?.total ?: 0}")
+        }
 
         lifecycleScope.launch {
             val savedBalance = db.emergencyBalanceDao().getBalance()
