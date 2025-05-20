@@ -12,4 +12,7 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM Expense")
     suspend fun getAllNow(): List<Expense>
+
+    @Query("SELECT * FROM Expense ORDER BY year DESC, month DESC, day DESC")
+    suspend fun getAllExpenses(): List<Expense>
 }

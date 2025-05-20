@@ -18,6 +18,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +44,16 @@ class MainActivity : AppCompatActivity() {
         val minusButton = findViewById<Button>(R.id.btMinus)
         val rightButton = findViewById<Button>(R.id.btRight)
         var categories: List<String>
+
+        // History of income/expenses
+        val recyclerView = findViewById<RecyclerView>(R.id.History)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        lifecycleScope.launch {
+            val expense = expenseDao.getAllExpenses()
+            val adapter = ExpenseAdapter(expense)
+            recyclerView.adapter = adapter
+        }
 
         fun updateBalanceDisplay() {
             balanceText.text = "$balance Kč"

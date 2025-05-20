@@ -52,12 +52,13 @@ class SecondActivity : AppCompatActivity() {
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         var categories: List<String>
 
+        // History of income/expenses
         val recyclerView = findViewById<RecyclerView>(R.id.History)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
-            val emergencyExpense = emergencyExpensesDao.getAllExpenses()  // You need a DAO function that returns List<Expense>
-            val adapter = ExpenseAdapter(emergencyExpense)
+            val emergencyExpense = emergencyExpensesDao.getAllExpenses()
+            val adapter = EmergencyExpenseAdapter(emergencyExpense)
             recyclerView.adapter = adapter
         }
 
