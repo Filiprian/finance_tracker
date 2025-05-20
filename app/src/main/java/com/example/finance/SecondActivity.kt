@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 
 class SecondActivity : AppCompatActivity() {
@@ -49,6 +51,15 @@ class SecondActivity : AppCompatActivity() {
         val goalText = findViewById<EditText>(R.id.ttGoal)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         var categories: List<String>
+
+        val recyclerView = findViewById<RecyclerView>(R.id.History)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        lifecycleScope.launch {
+            val emergencyExpense = emergencyExpensesDao.getAllExpenses()  // You need a DAO function that returns List<Expense>
+            val adapter = ExpenseAdapter(emergencyExpense)
+            recyclerView.adapter = adapter
+        }
 
 
         leftButton.setOnClickListener {

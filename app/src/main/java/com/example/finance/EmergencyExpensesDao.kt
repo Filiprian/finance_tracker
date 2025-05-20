@@ -12,4 +12,8 @@ interface EmergencyExpensesDao {
 
     @Query("SELECT * FROM EmergencyExpense")
     suspend fun getAllNow(): List<EmergencyExpense>
+
+    @Query("SELECT * FROM emergencyExpense ORDER BY year DESC, month DESC, day DESC")
+    suspend fun getAllExpenses(): List<EmergencyExpense>
+
 }
