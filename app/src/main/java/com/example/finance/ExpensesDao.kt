@@ -2,6 +2,7 @@ package com.example.finance
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
@@ -15,4 +16,7 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM Expense ORDER BY year DESC, month DESC, day DESC")
     suspend fun getAllExpenses(): List<Expense>
+
+    @Delete
+    suspend fun delete(expense: Expense)
 }

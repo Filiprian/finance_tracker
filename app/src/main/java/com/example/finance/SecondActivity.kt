@@ -59,7 +59,8 @@ class SecondActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val emergencyExpense = emergencyExpensesDao.getAllExpenses()
-            val adapter = EmergencyExpenseAdapter(emergencyExpense)
+            val adapter = EmergencyExpenseAdapter(emergencyExpense.toMutableList(), emergencyExpensesDao)
+
             recyclerView.adapter = adapter
         }
 

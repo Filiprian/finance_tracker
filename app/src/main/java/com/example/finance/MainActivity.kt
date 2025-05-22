@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val expense = expenseDao.getAllExpenses()
-            val adapter = ExpenseAdapter(expense)
+            val adapter = ExpenseAdapter(expense.toMutableList(), expenseDao)
             recyclerView.adapter = adapter
         }
 

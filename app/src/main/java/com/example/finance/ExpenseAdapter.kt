@@ -6,9 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ExpenseAdapter (private val expenses: List<Expense>) :
+class ExpenseAdapter (
+    private val expenses: MutableList<Expense>,
+    private val expenseDao: ExpenseDao
+) :
     RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,6 +54,21 @@ class ExpenseAdapter (private val expenses: List<Expense>) :
             val alertDialog = dialogBuilder.create()
 
             alertDialog.show()
+
+            val deleteButton = dialogView.findViewById<Button>(R.id.buttonDelete)
+
+            deleteButton.setOnClickListener {
+                Toast.makeText(holder.itemView.context, "Deleted", Toast.LENGTH_SHORT).show()
+                CoroutineScope(Dispatchers.IO).launch {
+                    expenseDao.delete(expense)
+
+                    withContext(Dispatchers.Main) {
+                        expenses.removeAt(position)
+                        notifyItemRemoved(position)
+                        alertDialog.dismiss()
+                    }
+                }
+            }
         }
     }
 
