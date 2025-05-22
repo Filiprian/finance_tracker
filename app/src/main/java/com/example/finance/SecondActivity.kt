@@ -56,6 +56,7 @@ class SecondActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.History)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+
         lifecycleScope.launch {
             val emergencyExpense = emergencyExpensesDao.getAllExpenses()
             val adapter = EmergencyExpenseAdapter(emergencyExpense)
