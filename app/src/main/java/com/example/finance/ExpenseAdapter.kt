@@ -1,5 +1,6 @@
 package com.example.finance
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,8 @@ import kotlinx.coroutines.withContext
 
 class ExpenseAdapter (
     private val expenses: MutableList<Expense>,
-    private val expenseDao: ExpenseDao
+    private val expenseDao: ExpenseDao,
+    private val activity: Activity
 ) :
     RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
@@ -67,6 +69,7 @@ class ExpenseAdapter (
                         notifyItemRemoved(position)
                         alertDialog.dismiss()
                     }
+                    (activity as MainActivity).refreshBalance()
                 }
             }
         }

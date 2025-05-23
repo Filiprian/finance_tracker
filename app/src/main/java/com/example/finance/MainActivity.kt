@@ -26,9 +26,21 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var expenseDao: ExpenseDao
-    private lateinit var balanceDao: BalanceDao
 
+    private lateinit var balanceText: TextView
     private var balance = 0
+
+    fun updateBalanceDisplay() {
+        balanceText.text = "$balance Kč"
+    }
+
+    fun refreshBalance() {
+        lifecycleScope.launch {
+            val total = expenseDao.getTotalBalance() ?: 0
+            balance = total
+            updateBalanceDisplay()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
         expenseDao = db.expenseDao()
-        balanceDao = db.balanceDao()
 
-        val balanceText = findViewById<TextView>(R.id.ttBalance)
+        balanceText = findViewById(R.id.ttBalance)
         val plusButton = findViewById<Button>(R.id.btPlus)
         val minusButton = findViewById<Button>(R.id.btMinus)
         val rightButton = findViewById<Button>(R.id.btRight)
@@ -51,17 +62,19 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val expense = expenseDao.getAllExpenses()
-            val adapter = ExpenseAdapter(expense.toMutableList(), expenseDao)
+            val adapter = ExpenseAdapter(
+                expense.toMutableList(),
+                expenseDao,
+                this@MainActivity
+                )
             recyclerView.adapter = adapter
         }
 
-        fun updateBalanceDisplay() {
-            balanceText.text = "$balance Kč"
-        }
+
 
         lifecycleScope.launch {
-            val savedBalance = db.balanceDao().getBalance()
-            balance = savedBalance?.total ?: 0
+            val total = expenseDao.getTotalBalance() ?: 0
+            balance = total
             updateBalanceDisplay()
         }
 
@@ -129,13 +142,8 @@ class MainActivity : AppCompatActivity() {
                         category = selectedCategory
                     )
 
-                    val currentBalance = Balance(
-                        total = balance
-                    )
-
                     lifecycleScope.launch {
                         expenseDao.insert(expense)
-                        balanceDao.insertOrUpdate(currentBalance)
                     }
 
                     alertDialog.dismiss()

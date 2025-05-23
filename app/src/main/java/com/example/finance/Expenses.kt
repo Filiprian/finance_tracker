@@ -14,12 +14,6 @@ data class Expense(
 )
 
 @Entity
-data class Balance(
-    @PrimaryKey val id: Int = 1,
-    val total: Int
-)
-
-@Entity
 data class EmergencyExpense(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val value: Int,
@@ -27,12 +21,6 @@ data class EmergencyExpense(
     val month: Int,
     val year: Int,
     val category: String = ""
-)
-
-@Entity
-data class EmergencyBalance(
-    @PrimaryKey val id: Int = 1,
-    val total: Int
 )
 
 @Entity

@@ -17,6 +17,10 @@ interface EmergencyExpensesDao {
     @Query("SELECT * FROM emergencyExpense ORDER BY year DESC, month DESC, day DESC")
     suspend fun getAllExpenses(): List<EmergencyExpense>
 
+    @Query("SELECT SUM(value) FROM emergencyExpense")
+    suspend fun getTotalBalance(): Int?
+
+
     @Delete
     suspend fun delete(expense: EmergencyExpense)
 }

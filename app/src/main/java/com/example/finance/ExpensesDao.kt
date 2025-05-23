@@ -17,6 +17,9 @@ interface ExpenseDao {
     @Query("SELECT * FROM Expense ORDER BY year DESC, month DESC, day DESC")
     suspend fun getAllExpenses(): List<Expense>
 
+    @Query("SELECT SUM(value) FROM Expense")
+    suspend fun getTotalBalance(): Int?
+
     @Delete
     suspend fun delete(expense: Expense)
 }

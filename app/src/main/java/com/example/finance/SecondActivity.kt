@@ -24,12 +24,39 @@ import kotlinx.coroutines.launch
 
 class SecondActivity : AppCompatActivity() {
 
+
+
     private var balance = 0
 
     private lateinit var db: AppDatabase
     private lateinit var emergencyExpensesDao: EmergencyExpensesDao
-    private lateinit var emergencyBalanceDao: EmergencyBalanceDao
     private lateinit var emergencyGoalDao: EmergencyGoalDao
+
+    private lateinit var balanceText: TextView
+    private lateinit var warningText: TextView
+    private lateinit var plusButton: Button
+    private lateinit var minusButton: Button
+    private lateinit var rightButton: Button
+    private lateinit var leftButton: Button
+    private lateinit var goalText: EditText
+    private lateinit var progressBar: ProgressBar
+
+    fun updateBalanceDisplay() {
+        balanceText.text = "$balance Kč"
+        val goal = goalText.text.toString().toFloatOrNull()
+        if (goal != null && goal > 0) {
+            val progress = ((balance.toFloat() / goal) * 100).toInt()
+            progressBar.progress = progress.coerceIn(0, 100)
+        }
+    }
+
+    fun refreshBalance() {
+        lifecycleScope.launch {
+            val total = emergencyExpensesDao.getTotalBalance() ?: 0
+            balance = total
+            updateBalanceDisplay()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +65,17 @@ class SecondActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
         emergencyExpensesDao = db.emergencyExpenseDao()
-        emergencyBalanceDao = db.emergencyBalanceDao()
         emergencyGoalDao = db.emergencyGoalDao()
 
 
-        val balanceText = findViewById<TextView>(R.id.ttBalance)
-        val warningText = findViewById<TextView>(R.id.ttWarning)
-        val plusButton = findViewById<Button>(R.id.btPlus)
-        val minusButton = findViewById<Button>(R.id.btMinus)
-        val rightButton = findViewById<Button>(R.id.btRight)
-        val leftButton = findViewById<Button>(R.id.btLeft)
-        val goalText = findViewById<EditText>(R.id.ttGoal)
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        balanceText = findViewById(R.id.ttBalance)
+        warningText = findViewById(R.id.ttWarning)
+        plusButton = findViewById(R.id.btPlus)
+        minusButton = findViewById(R.id.btMinus)
+        rightButton = findViewById(R.id.btRight)
+        leftButton = findViewById(R.id.btLeft)
+        goalText = findViewById(R.id.ttGoal)
+        progressBar = findViewById(R.id.progressBar)
         var categories: List<String>
 
         // History of income/expenses
@@ -59,7 +85,11 @@ class SecondActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val emergencyExpense = emergencyExpensesDao.getAllExpenses()
-            val adapter = EmergencyExpenseAdapter(emergencyExpense.toMutableList(), emergencyExpensesDao)
+            val adapter = EmergencyExpenseAdapter(
+                emergencyExpense.toMutableList(),
+                emergencyExpensesDao,
+                this@SecondActivity
+            )
 
             recyclerView.adapter = adapter
         }
@@ -70,15 +100,6 @@ class SecondActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-        fun updateBalanceDisplay() {
-            balanceText.text = "$balance Kč"
-            val goal = goalText.text.toString().toFloatOrNull()
-            if (goal != null && goal > 0) {
-                val progress = ((balance.toFloat() / goal) * 100).toInt()
-                progressBar.progress = progress.coerceIn(0, 100)
-            }
-        }
 
         goalText.addTextChangedListener(object : android.text.TextWatcher {
             override fun afterTextChanged(s: android.text.Editable?) {
@@ -98,7 +119,7 @@ class SecondActivity : AppCompatActivity() {
                     warningText.visibility = View.VISIBLE
                 }
 
-                updateBalanceDisplay() // call the same method to update the bar
+                updateBalanceDisplay()
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -110,8 +131,8 @@ class SecondActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            val savedBalance = db.emergencyBalanceDao().getBalance()
-            balance = savedBalance?.total ?: 0
+            val total = emergencyExpensesDao.getTotalBalance() ?: 0
+            balance = total
             updateBalanceDisplay()
         }
 
@@ -174,13 +195,8 @@ class SecondActivity : AppCompatActivity() {
                         category = selectedCategory
                     )
 
-                    val emergencyBalance = EmergencyBalance(
-                        total = balance
-                    )
-
                     lifecycleScope.launch {
                         emergencyExpensesDao.insert(emergencyExpense)
-                        emergencyBalanceDao.insertOrUpdate(emergencyBalance)
                     }
 
                     alertDialog.dismiss()
