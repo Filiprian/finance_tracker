@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db: AppDatabase
     private lateinit var expenseDao: ExpenseDao
 
+    private lateinit var expenseAdapter: ExpenseAdapter
+
     private lateinit var balanceText: TextView
     private var balance = 0
 
@@ -39,6 +41,13 @@ class MainActivity : AppCompatActivity() {
             val total = expenseDao.getTotalBalance() ?: 0
             balance = total
             updateBalanceDisplay()
+        }
+    }
+
+    fun refreshExpenseList() {
+        lifecycleScope.launch {
+            val expense = expenseDao.getAllExpenses()
+            expenseAdapter.updateData(expense)
         }
     }
 
@@ -62,12 +71,12 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val expense = expenseDao.getAllExpenses()
-            val adapter = ExpenseAdapter(
+            expenseAdapter = ExpenseAdapter(
                 expense.toMutableList(),
                 expenseDao,
                 this@MainActivity
                 )
-            recyclerView.adapter = adapter
+            recyclerView.adapter = expenseAdapter
         }
 
 
@@ -144,6 +153,8 @@ class MainActivity : AppCompatActivity() {
 
                     lifecycleScope.launch {
                         expenseDao.insert(expense)
+                        refreshBalance()
+                        refreshExpenseList()
                     }
 
                     alertDialog.dismiss()

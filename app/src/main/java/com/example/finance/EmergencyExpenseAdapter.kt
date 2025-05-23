@@ -20,7 +20,14 @@ class EmergencyExpenseAdapter(
     private val expenseDao: EmergencyExpensesDao,
     private val activity: Activity
 ) :
+
     RecyclerView.Adapter<EmergencyExpenseAdapter.ExpenseViewHolder>() {
+
+    fun updateData(newExpenses: List<EmergencyExpense>) {
+        expenses.clear()
+        expenses.addAll(newExpenses)
+        notifyDataSetChanged()
+    }
 
     class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textDate: TextView = itemView.findViewById(R.id.textDate)

@@ -41,6 +41,9 @@ class SecondActivity : AppCompatActivity() {
     private lateinit var goalText: EditText
     private lateinit var progressBar: ProgressBar
 
+    private lateinit var emergencyExpenseAdapter: EmergencyExpenseAdapter
+
+
     fun updateBalanceDisplay() {
         balanceText.text = "$balance Kč"
         val goal = goalText.text.toString().toFloatOrNull()
@@ -55,6 +58,13 @@ class SecondActivity : AppCompatActivity() {
             val total = emergencyExpensesDao.getTotalBalance() ?: 0
             balance = total
             updateBalanceDisplay()
+        }
+    }
+
+    fun refreshExpenseList() {
+        lifecycleScope.launch {
+            val expense = emergencyExpensesDao.getAllExpenses()
+            emergencyExpenseAdapter.updateData(expense)
         }
     }
 
@@ -85,13 +95,12 @@ class SecondActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val emergencyExpense = emergencyExpensesDao.getAllExpenses()
-            val adapter = EmergencyExpenseAdapter(
+            emergencyExpenseAdapter = EmergencyExpenseAdapter(
                 emergencyExpense.toMutableList(),
                 emergencyExpensesDao,
                 this@SecondActivity
             )
-
-            recyclerView.adapter = adapter
+            recyclerView.adapter = emergencyExpenseAdapter
         }
 
 
@@ -197,6 +206,8 @@ class SecondActivity : AppCompatActivity() {
 
                     lifecycleScope.launch {
                         emergencyExpensesDao.insert(emergencyExpense)
+                        refreshBalance()
+                        refreshExpenseList()
                     }
 
                     alertDialog.dismiss()

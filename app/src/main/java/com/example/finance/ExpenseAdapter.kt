@@ -21,6 +21,12 @@ class ExpenseAdapter (
 ) :
     RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
+    fun updateData(newExpenses: List<Expense>) {
+        expenses.clear()
+        expenses.addAll(newExpenses)
+        notifyDataSetChanged()
+    }
+
     class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textDate: TextView = itemView.findViewById(R.id.textDate)
         val textValue: TextView = itemView.findViewById(R.id.textValue)
